@@ -66,7 +66,10 @@ const Bingo = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            className="relative text-wrap overflow-clip bg-background p-2 flex flex-wrap justify-center items-center"
+            className={clsx(
+              "relative text-wrap overflow-clip bg-background p-2 flex flex-wrap justify-center items-center",
+              { "cursor-pointer": isPlaying },
+            )}
             onClick={() => handleCheck(index)}
             style={{
               backgroundImage: card.isChecked ? `url(${tiger})` : "",
