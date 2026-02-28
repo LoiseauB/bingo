@@ -18,12 +18,15 @@ import {
 } from "./ui/select";
 
 import tiger from "@/assets/tiger_icon.svg";
+import { useState } from "react";
 
 const Bingo = () => {
   const { cards, cardsNumber, isPlaying } = useAppSelector(
     (state) => state.bingo,
   );
   const dispatch = useAppDispatch();
+
+  const [textAreaLength, setTextAreaLength] = useState<number[]>([]);
 
   const handleTitle = (index: number, title: string) => {
     if (title.length <= 0) return;
@@ -37,6 +40,12 @@ const Bingo = () => {
   const handleCheck = (index: number) => {
     if (!isPlaying) return;
     dispatch(setCardChecked({ index }));
+  };
+
+  const handleChangeLength = (index: number, length: number) => {
+    const newArray = [...textAreaLength];
+    newArray[index] = length;
+    setTextAreaLength(newArray);
   };
 
   return (
@@ -56,7 +65,7 @@ const Bingo = () => {
       )}
       <section
         className={clsx(
-          "grid 2xl:w-4/12 aspect-square bg-secondary gap-1 p-1",
+          "grid w-11/12 md:w-9/12 lg:w-5/12 2xl:w-4/12 3xl:w-7/12 aspect-square bg-secondary gap-1 p-1",
           {
             "grid-cols-4": cardsNumber === 16,
             "grid-cols-3": cardsNumber === 9,
@@ -67,8 +76,8 @@ const Bingo = () => {
           <div
             key={index}
             className={clsx(
-              "relative text-wrap overflow-clip bg-background p-2 flex flex-wrap justify-center items-center",
-              { "cursor-pointer": isPlaying },
+              "relative text-wrap overflow-clip bg-background flex flex-wrap justify-center items-center",
+              { "cursor-pointer p-2": isPlaying },
             )}
             onClick={() => handleCheck(index)}
             style={{
@@ -81,16 +90,22 @@ const Bingo = () => {
             {isPlaying ? (
               <p
                 className={clsx("text-center font-semibold", {
-                  "text-2xl": card.title.length <= 11,
-                  "text-md": card.title.length > 16,
+                  "text-sm xl:text-2xl": card.title.length <= 11,
+                  "text-xs xl:text-md": card.title.length > 11,
                 })}
               >
                 {card.title}
               </p>
             ) : (
               <textarea
-                className="size-full text-center"
+                className={clsx("size-full text-center font-semibold p-1 md:p-2", {
+                  "text-sm xl:text-2xl": textAreaLength[index] <= 11,
+                  "text-xs xl:text-md": textAreaLength[index] > 11,
+                })}
                 onBlur={(e) => handleTitle(index, e.target.value)}
+                onChange={(e) =>
+                  handleChangeLength(index, e.target.value.length)
+                }
               />
             )}
           </div>
