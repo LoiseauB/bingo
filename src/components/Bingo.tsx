@@ -91,7 +91,7 @@ const Bingo = () => {
               <p
                 className={clsx("text-center font-semibold", {
                   "text-sm xl:text-2xl": card.title.length <= 11,
-                  "text-xs xl:text-md": card.title.length > 11,
+                  "text-xs xl:text-lg": card.title.length > 11,
                 })}
               >
                 {card.title}
@@ -100,7 +100,7 @@ const Bingo = () => {
               <textarea
                 className={clsx("size-full text-center font-semibold p-1 md:p-2", {
                   "text-sm xl:text-2xl": textAreaLength[index] <= 11,
-                  "text-xs xl:text-md": textAreaLength[index] > 11,
+                  "text-xs xl:text-lg": textAreaLength[index] > 11,
                 })}
                 onBlur={(e) => handleTitle(index, e.target.value)}
                 onChange={(e) =>
