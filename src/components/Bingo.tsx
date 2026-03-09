@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "./ui/select";
 
+import { AnimatePresence, motion } from "motion/react";
+
 import tiger from "@/assets/tiger_icon.svg";
 import { useState } from "react";
 
@@ -27,6 +29,7 @@ const Bingo = () => {
   const dispatch = useAppDispatch();
 
   const [textAreaLength, setTextAreaLength] = useState<number[]>([]);
+  const [isAnimated, setIsAnimated] = useState(false);
 
   const handleTitle = (index: number, title: string) => {
     if (title.length <= 0) return;
@@ -49,7 +52,7 @@ const Bingo = () => {
   };
 
   return (
-    <section className="size-full flex flex-col items-center gap-10">
+    <section className="relative size-full flex flex-col items-center gap-10">
       {!isPlaying && (
         <Select onValueChange={(value) => handleSize(Number(value))}>
           <SelectTrigger className="w-45">
@@ -65,7 +68,7 @@ const Bingo = () => {
       )}
       <section
         className={clsx(
-          "grid w-11/12 md:w-9/12 lg:w-5/12 2xl:w-4/12 3xl:w-7/12 aspect-square bg-secondary gap-1 p-1",
+          "grid w-11/12 md:w-9/12 lg:w-5/12 2xl:w-4/12 3xl:w-7/12 aspect-square bg-secondary gap-1 p-1 shadow-2xl shadow-accent",
           {
             "grid-cols-4": cardsNumber === 16,
             "grid-cols-3": cardsNumber === 9,
@@ -98,10 +101,13 @@ const Bingo = () => {
               </p>
             ) : (
               <textarea
-                className={clsx("size-full text-center font-semibold p-1 md:p-2", {
-                  "text-sm xl:text-2xl": textAreaLength[index] <= 11,
-                  "text-xs xl:text-lg": textAreaLength[index] > 11,
-                })}
+                className={clsx(
+                  "size-full text-center font-semibold p-1 md:p-2",
+                  {
+                    "text-sm xl:text-2xl": textAreaLength[index] <= 11,
+                    "text-xs xl:text-lg": textAreaLength[index] > 11,
+                  },
+                )}
                 onBlur={(e) => handleTitle(index, e.target.value)}
                 onChange={(e) =>
                   handleChangeLength(index, e.target.value.length)
@@ -113,7 +119,13 @@ const Bingo = () => {
       </section>
       <div className="flex flex-col gap-6">
         {!isPlaying && (
-          <Button size="lg" onClick={() => dispatch(setIsPlaying())}>
+          <Button
+            size="lg"
+            onClick={() => {
+              dispatch(setIsPlaying());
+              setIsAnimated(true);
+            }}
+          >
             Let's go !
           </Button>
         )}
@@ -126,6 +138,21 @@ const Bingo = () => {
           Nouveau bingo
         </Button>
       </div>
+      <AnimatePresence>
+        {isAnimated && isPlaying && (
+          <div className="absolute top-2/7 py-8 w-screen">
+            <motion.p
+              initial={{ opacity: 0, x: -2000 }}
+              animate={{ opacity: 1, x: "45%", transition: { duration: 2 } }}
+              exit={{ opacity: 0, x: 2000, transition: { duration: 2 }  }}
+              onAnimationComplete={() => setIsAnimated(false)}
+              className="font-title text-center text-5xl md:text-7xl xl:text-9xl tracking-[-0.5rem] xl:tracking-[-0.7rem] leading-none backdrop-blur-sm size-fit"
+            >
+              Let's GOOOO !
+            </motion.p>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
