@@ -21,7 +21,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </header>
       <main className="relative px-4 py-6 mb-auto">{children}</main>
-      <footer className="relative mt-6 bg-primary w-full border-t-2 p-2.5">
+      <footer className="relative mt-6 bg-primary w-full border-t-4 p-2.5">
         <p className="text-center">On va le réussir ce bingo !</p>
       </footer>
     </div>

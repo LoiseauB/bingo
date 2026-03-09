@@ -23,7 +23,7 @@ import tiger from "@/assets/tiger_icon.svg";
 import { useState } from "react";
 
 const Bingo = () => {
-  const { cards, cardsNumber, isPlaying } = useAppSelector(
+  const { cards, cardsNumber, isPlaying, isFinished } = useAppSelector(
     (state) => state.bingo,
   );
   const dispatch = useAppDispatch();
@@ -144,12 +144,49 @@ const Bingo = () => {
             <motion.p
               initial={{ opacity: 0, x: -2000 }}
               animate={{ opacity: 1, x: "45%", transition: { duration: 2 } }}
-              exit={{ opacity: 0, x: 2000, transition: { duration: 2 }  }}
+              exit={{ opacity: 0, x: 2000, transition: { duration: 2 } }}
               onAnimationComplete={() => setIsAnimated(false)}
               className="font-title text-center text-5xl md:text-7xl xl:text-9xl tracking-[-0.5rem] xl:tracking-[-0.7rem] leading-none backdrop-blur-sm size-fit"
             >
               Let's GOOOO !
             </motion.p>
+          </div>
+        )}
+        {isFinished && isPlaying && (
+          <div className="absolute top-1/7 py-8 w-screen bg-background border-y-4 border-accent flex flex-col items-center gap-8">
+            <motion.p
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 2 } }}
+              exit={{ opacity: 0 }}
+              className="font-title text-center text-5xl md:text-7xl xl:text-9xl tracking-[-0.5rem] xl:tracking-[-0.7rem] leading-none backdrop-blur-sm size-fit"
+            >
+              TIÉ UN TCHHHIGRE !!!
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 2, delay: 2 } }}
+              exit={{ opacity: 0 }}
+            >
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/ttjGFkand7s?si=TsYP2CxVrTubWHwm&amp;controls=0"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="w-full h-auto lg:w-140 lg:h-78.75"
+              ></iframe>
+            </motion.div>
+            <Button
+              variant="link"
+              onClick={() => {
+                dispatch(resetCards());
+              }}
+            >
+              Nouveau bingo
+            </Button>
           </div>
         )}
       </AnimatePresence>

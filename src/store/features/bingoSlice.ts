@@ -7,6 +7,7 @@ export type BingoStateType = {
     isChecked: boolean;
   }[];
   isPlaying: boolean;
+  isFinished: boolean;
 };
 
 const initialState: BingoStateType = {
@@ -16,6 +17,7 @@ const initialState: BingoStateType = {
     isChecked: false,
   })),
   isPlaying: false,
+  isFinished: false,
 };
 
 const bingoSlice = createSlice({
@@ -39,11 +41,18 @@ const bingoSlice = createSlice({
     setCardChecked(state, action: PayloadAction<{ index: number }>) {
       state.cards[action.payload.index].isChecked =
         !state.cards[action.payload.index].isChecked;
+        const checkedCards = state.cards.filter((card) => card.isChecked);
+        if (checkedCards.length === state.cards.length) {
+          state.isFinished = true;
+        } else {
+          state.isFinished = false;
+        }
     },
     resetCards(state) {
       state.cards = initialState.cards;
       state.cardsNumber = initialState.cardsNumber;
       state.isPlaying = initialState.isPlaying;
+      state.isFinished = initialState.isFinished;
     },
     setIsPlaying(state) {
       state.isPlaying = !state.isPlaying
